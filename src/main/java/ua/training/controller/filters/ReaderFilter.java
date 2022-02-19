@@ -14,7 +14,7 @@ public class ReaderFilter implements Filter {
         if (user != null && user.getRole().getName().equals("ROLE_READER")) {
             chain.doFilter(request, response);
         } else {
-            throw new RuntimeException("error.auth");
+            throw new RuntimeException("You cannot enter this page");
         }
 
     }

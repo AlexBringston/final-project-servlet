@@ -1,6 +1,9 @@
 package ua.training.model.services;
 
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.training.model.dao.AuthorDAO;
 import ua.training.model.dao.BookDAO;
 import ua.training.model.dao.DAOFactory;
@@ -21,7 +24,7 @@ import java.util.Set;
 public class BookService {
 
     private final DAOFactory daoFactory = DAOFactory.getInstance();
-
+    private final Logger logger = LogManager.getLogger(BookService.class);
 
     public boolean saveBook(Book book, Connection connection) {
         BookDAO bookDAO = daoFactory.createBookDAO(connection);
@@ -101,12 +104,13 @@ public class BookService {
     public Author getAuthor(Author author, Connection connection) {
         AuthorDAO authorDAO = daoFactory.createAuthorDAO(connection);
         return authorDAO.findByNameContainingAndSurnameContaining(author.getName(),
-                author.getSurname()).orElseThrow(RuntimeException::new);
+                author.getSurname()).orElseThrow(() -> new IllegalArgumentException("There is no such author"));
     }
 
     public Publisher getPublisher(Publisher publisher, Connection connection) {
         PublisherDAO publisherDAO = daoFactory.createPublisherDAO(connection);
-        return publisherDAO.findByName(publisher.getName()).orElseThrow(RuntimeException::new);
+        return publisherDAO.findByName(publisher.getName()).orElseThrow(() -> new IllegalArgumentException("There is " +
+                "no such publisher"));
     }
 
     public boolean updateBookAuthors(Long bookId, Set<Author> authors, Connection connection) {
@@ -134,10 +138,10 @@ public class BookService {
             ConnectionManager.close(connection);
             try {
                 connection.rollback();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException exception1) {
+                logger.log(Level.WARN, exception1.getMessage(), exception1.getCause());
             }
+            throw new RuntimeException("Could not update book's additional authors");
         }
-        return false;
     }
 }

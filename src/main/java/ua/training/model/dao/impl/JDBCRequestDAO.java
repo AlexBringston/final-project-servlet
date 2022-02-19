@@ -132,9 +132,9 @@ public class JDBCRequestDAO implements RequestDAO {
                 RequestMapper requestMapper = new RequestMapper();
                 requests.add(requestMapper.extractFromResultSet(resultSet));
             }
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
-            throw new RuntimeException(ex);
+        } catch (Exception exception) {
+            logger.log(Level.ERROR,exception.getMessage());
+            throw new RuntimeException("Could not find any request with given status");
         }
         finally {
             ConnectionManager.close(connection);
@@ -153,8 +153,9 @@ public class JDBCRequestDAO implements RequestDAO {
                 return resultSet.getInt(1);
             }
             else return 0;
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception exception) {
+            logger.log(Level.ERROR,exception.getMessage());
+            throw new RuntimeException("Could not count requests with given status name");
         }
     }
 }

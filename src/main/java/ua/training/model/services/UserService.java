@@ -1,6 +1,8 @@
 package ua.training.model.services;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.training.model.dao.*;
 import ua.training.model.dao.impl.ConnectionManager;
 import ua.training.model.dto.Page;
@@ -17,10 +19,11 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final DAOFactory daoFactory = DAOFactory.getInstance();
+    private final Logger logger = LogManager.getLogger(UserService.class);
 
     public User findUserByUsername(String username, Connection connection) throws SQLException {
         UserDAO userDAO = daoFactory.createUserDAO(connection);
-        User user = userDAO.findByUsername(username).orElseThrow(() -> new SQLException("User was not " +
+        User user = userDAO.findByUsername(username).orElseThrow(() -> new RuntimeException("User was not " +
                 "found"));
         if (!connection.isClosed()) {
             ConnectionManager.close(connection);
@@ -28,21 +31,23 @@ public class UserService {
         return user;
     }
 
-    public boolean registerNewUser(User user,String role, Connection connection) throws SQLException {
-        RoleDAO roleDao = daoFactory.createRoleDAO(connection);
+    public boolean registerNewUser(User user, String role, Connection connection) throws SQLException {
+        RoleDAO roleDAO = daoFactory.createRoleDAO(connection);
         UserDAO userDAO = daoFactory.createUserDAO(connection);
-        user.setRole(roleDao.findByName(role).orElseThrow(IllegalArgumentException::new));
+        user.setRole(roleDAO.findByName(role).orElseThrow(() -> new IllegalArgumentException("There is no such role")));
         boolean b = userDAO.create(user);
         if (!connection.isClosed()) {
             ConnectionManager.close(connection);
         }
         return b;
     }
+
     public boolean removeLibrarianRole(Long userId, Connection connection) {
         UserDAO userDAO = daoFactory.createUserDAO(connection);
         RoleDAO roleDAO = daoFactory.createRoleDAO(connection);
         User user = userDAO.findById(userId);
-        user.setRole(roleDAO.findByName("ROLE_READER").orElseThrow(RuntimeException::new));
+        user.setRole(roleDAO.findByName("ROLE_READER").orElseThrow(() -> new IllegalArgumentException("There is no " +
+                "such role")));
         System.out.println(user);
         return userDAO.update(user);
     }
@@ -56,7 +61,7 @@ public class UserService {
         if (action.equals("unblock")) {
             user.setAccountNonLocked(true);
         }
-        System.out.println(user);
+
         return userDAO.update(user);
     }
 
@@ -77,7 +82,8 @@ public class UserService {
                                             String sortField, String sortDirection, Connection connection) {
         UserDAO userDAO = daoFactory.createUserDAO(connection);
         RoleDAO roleDAO = daoFactory.createRoleDAO(connection);
-        Role roleByName = roleDAO.findByName(role).orElseThrow(() -> new RuntimeException("This role was not found"));
+        Role roleByName = roleDAO.findByName(role).orElseThrow(() -> new IllegalArgumentException("There is no " +
+                "such role"));
         Integer totalUsersWithRole = userDAO.countAllByRole(role);
         int pages = totalUsersWithRole / limit + (totalUsersWithRole % limit == 0 ? 0 : 1);
         Integer offset = page * limit;

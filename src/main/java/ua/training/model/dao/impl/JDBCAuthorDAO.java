@@ -1,5 +1,8 @@
 package ua.training.model.dao.impl;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.training.model.dao.AuthorDAO;
 import ua.training.model.dao.mappers.AuthorMapper;
 import ua.training.model.entities.Author;
@@ -12,7 +15,8 @@ import java.util.Optional;
 public class JDBCAuthorDAO implements AuthorDAO {
 
     private final Connection connection;
-
+    private final Logger logger = LogManager.getLogger(JDBCAuthorDAO.class);
+    
     public JDBCAuthorDAO(Connection connection) {
         this.connection = connection;
     }
@@ -31,8 +35,9 @@ public class JDBCAuthorDAO implements AuthorDAO {
             if (rs.next()) {
                 author = Optional.of(authorMapper.extractFromResultSet(rs));
             }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception exception) {
+            logger.log(Level.WARN, exception.getMessage());
+            throw new RuntimeException("Could not find author with such name and surname");
         }
         return author;
     }
@@ -45,7 +50,8 @@ public class JDBCAuthorDAO implements AuthorDAO {
             preparedStatement.setString(2, entity.getSurname());
             return preparedStatement.executeUpdate() != 0;
         }catch (SQLException exception){
-            throw new RuntimeException(exception);
+            logger.log(Level.WARN, exception.getMessage());
+            throw new RuntimeException("Could not create an author");
         }
     }
 
@@ -61,8 +67,9 @@ public class JDBCAuthorDAO implements AuthorDAO {
             if (rs.next()) {
                 author = authorMapper.extractFromResultSet(rs);
             }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception exception) {
+            logger.log(Level.WARN, exception.getMessage());
+            throw new RuntimeException("Could not find author by given id");
         }
         return author;
     }
@@ -77,8 +84,9 @@ public class JDBCAuthorDAO implements AuthorDAO {
             if (rs.next()) {
                 authors.add(authorMapper.extractFromResultSet(rs));
             }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception exception) {
+            logger.log(Level.WARN, exception.getMessage());
+            throw new RuntimeException("Could not find all authors");
         }
         return authors;
     }
@@ -91,7 +99,8 @@ public class JDBCAuthorDAO implements AuthorDAO {
             preparedStatement.setString(2, entity.getSurname());
             return preparedStatement.executeUpdate() != 0;
         }catch (SQLException exception){
-            throw new RuntimeException(exception);
+            logger.log(Level.WARN, exception.getMessage());
+            throw new RuntimeException("Could not update an author");
         }
     }
 

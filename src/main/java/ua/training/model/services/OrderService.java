@@ -1,5 +1,8 @@
 package ua.training.model.services;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.training.model.dao.*;
 import ua.training.model.dto.Page;
 import ua.training.model.entities.*;
@@ -12,6 +15,7 @@ import java.util.List;
 public class OrderService {
 
     private final DAOFactory daoFactory = DAOFactory.getInstance();
+    private final Logger logger = LogManager.getLogger(OrderService.class);
 
     public void createOrderOnGivenBook(Long userId, Long bookId, Connection connection) throws SQLException {
         try {
@@ -25,7 +29,8 @@ public class OrderService {
             if (book.getQuantity().equals(0) || book.getAmountOfBooksTaken().equals(book.getQuantity())) {
                 throw new RuntimeException("The book is not available to be given");
             }
-            Status status = statusDAO.findStatusByName("status.pending").orElseThrow(RuntimeException::new);
+            Status status = statusDAO.findStatusByName("status.pending").orElseThrow(() -> new IllegalArgumentException(
+                    "There is no such status"));
             Request request = new Request(user, book, status);
             book.setAmountOfBooksTaken(book.getAmountOfBooksTaken() + 1);
             bookDao.update(book);
@@ -35,8 +40,9 @@ public class OrderService {
             try {
                 connection.rollback();
             } catch (SQLException exception1) {
-
+                logger.log(Level.WARN, exception1.getMessage(), exception1.getCause());
             }
+            throw new RuntimeException("Could not create an order");
         }
     }
 
@@ -95,17 +101,20 @@ public class OrderService {
             connection.setAutoCommit(false);
             Request request = requestDAO.findById(requestId);
             ReadingRoom readingRoom = new ReadingRoom(request.getBook(), request.getUser(),
-                    statusDAO.findStatusByName("status.handed.over").orElseThrow(RuntimeException::new));
+                    statusDAO.findStatusByName("status.handed.over").orElseThrow(() -> new IllegalArgumentException(
+                            "There is no such status")));
             readingRoomDAO.create(readingRoom);
-            request.setStatus(statusDAO.findStatusByName("status.processed").orElseThrow(RuntimeException::new));
+            request.setStatus(statusDAO.findStatusByName("status.processed").orElseThrow(() -> new IllegalArgumentException(
+                    "There is no such status")));
             requestDAO.update(request);
             connection.commit();
         } catch (Exception exception) {
             try {
                 connection.rollback();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException exception1) {
+                logger.log(Level.WARN, exception1.getMessage(), exception1.getCause());
             }
+            throw new RuntimeException("Could not add a request to reading room");
         }
     }
 
@@ -115,8 +124,11 @@ public class OrderService {
         BookDAO bookDAO = daoFactory.createBookDAO(connection);
         try {
             connection.setAutoCommit(false);
-            ReadingRoom readingRoom = readingRoomDAO.findBookTakenByUser(userId, bookId).orElseThrow(RuntimeException::new);
-            readingRoom.setStatus(statusDAO.findStatusByName("status.returned").orElseThrow(RuntimeException::new));
+            ReadingRoom readingRoom =
+                    readingRoomDAO.findBookTakenByUser(userId, bookId).orElseThrow(() -> new IllegalArgumentException(
+                            "There is no such book taken by such user in reading room"));
+            readingRoom.setStatus(statusDAO.findStatusByName("status.returned").orElseThrow(() -> new IllegalArgumentException(
+                    "There is no such status")));
             Book book = readingRoom.getBook();
             book.setAmountOfBooksTaken(book.getAmountOfBooksTaken() - 1);
             readingRoomDAO.update(readingRoom);
@@ -126,10 +138,10 @@ public class OrderService {
         } catch (SQLException exception) {
             try {
                 connection.rollback();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException exception1) {
+                logger.log(Level.WARN, exception1.getMessage(), exception1.getCause());
             }
-            return false;
+            throw new RuntimeException("Could not remove asked request from reading room");
         }
 
     }
@@ -143,7 +155,8 @@ public class OrderService {
         try {
             connection.setAutoCommit(false);
             for (ReadingRoom readingRoom : readingRoomList) {
-                readingRoom.setStatus(statusDAO.findStatusByName("status.returned").orElseThrow(RuntimeException::new));
+                readingRoom.setStatus(statusDAO.findStatusByName("status.returned").orElseThrow(() -> new IllegalArgumentException(
+                        "There is no such status")));
                 Book book = readingRoom.getBook();
                 book.setAmountOfBooksTaken(book.getAmountOfBooksTaken() - 1);
                 bookDAO.update(book);
@@ -154,10 +167,10 @@ public class OrderService {
         } catch (SQLException exception) {
             try {
                 connection.rollback();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException exception1) {
+                logger.log(Level.WARN, exception1.getMessage(), exception1.getCause());
             }
-            return false;
+            throw new RuntimeException("Could not remove any request from reading room");
         }
     }
 
@@ -173,7 +186,8 @@ public class OrderService {
             StatusDAO statusDAO = daoFactory.createStatusDAO(connection);
             BookDAO bookDAO = daoFactory.createBookDAO(connection);
             Request request = requestDAO.findById(requestId);
-            request.setStatus(statusDAO.findStatusByName("status.rejected").orElseThrow(RuntimeException::new));
+            request.setStatus(statusDAO.findStatusByName("status.rejected").orElseThrow(() -> new IllegalArgumentException(
+                    "There is no such status")));
             Book book = request.getBook();
             book.setAmountOfBooksTaken(book.getAmountOfBooksTaken() - 1);
             bookDAO.update(book);
@@ -182,8 +196,10 @@ public class OrderService {
         } catch (SQLException exception) {
             try {
                 connection.rollback();
-            } catch (SQLException e) {
+            } catch (SQLException exception1) {
+                logger.log(Level.WARN, exception1.getMessage(), exception1.getCause());
             }
+            throw new RuntimeException("Could not reject a request for ordering a book");
         }
     }
 
@@ -208,14 +224,14 @@ public class OrderService {
             saveRequestToUsersAbonnement(abonnement, requestId, connection);
             book.setAmountOfBooksTaken(book.getAmountOfBooksTaken() + 1);
             bookDAO.update(book);
-            System.out.println(book);
             connection.commit();
         } catch (Exception exception) {
             try {
                 connection.rollback();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException exception1) {
+                logger.log(Level.WARN, exception1.getMessage(), exception1.getCause());
             }
+            throw new RuntimeException("Could not add an entry to abonnement");
         }
     }
 
@@ -225,10 +241,10 @@ public class OrderService {
         Request request = findRequestById(requestId, connection);
         AbonnementDAO abonnementDAO = daoFactory.createAbonnementDAO(connection);
         StatusDAO statusDAO = daoFactory.createStatusDAO(connection);
-        request.setStatus(statusDAO.findStatusByName("status.processed").orElseThrow(RuntimeException::new));
-        abonnement.setStatus(statusDAO.findStatusByName("status.handed.over").orElseThrow(RuntimeException::new));
-        System.out.println(abonnement);
-        System.out.println(request);
+        request.setStatus(statusDAO.findStatusByName("status.processed").orElseThrow(() -> new IllegalArgumentException(
+                "There is no such status")));
+        abonnement.setStatus(statusDAO.findStatusByName("status.handed.over").orElseThrow(() -> new IllegalArgumentException(
+                "There is no such status")));
         requestDAO.update(request);
         abonnementDAO.create(abonnement);
     }
@@ -266,8 +282,9 @@ public class OrderService {
         try {
             connection.setAutoCommit(false);
             Abonnement abonnement = abonnementDAO.findAbonnementByUserIdAndBookId(userId, bookId)
-                    .orElseThrow(RuntimeException::new);
-            abonnement.setStatus(statusDAO.findStatusByName("status." + action).orElseThrow(RuntimeException::new));
+                    .orElseThrow(() -> new IllegalArgumentException("There is no such abonnement entry"));
+            abonnement.setStatus(statusDAO.findStatusByName("status." + action).orElseThrow(() -> new IllegalArgumentException(
+                    "There is no such status")));
             if (abonnement.getStatus().getName().equals("status.returned")) {
                 Book book = abonnement.getBook();
                 book.setAmountOfBooksTaken(book.getAmountOfBooksTaken() - 1);
@@ -280,8 +297,9 @@ public class OrderService {
             try {
                 connection.rollback();
             } catch (SQLException exception1) {
-                System.out.println(exception1.getMessage());
+                logger.log(Level.WARN, exception1.getMessage(), exception1.getCause());
             }
+            throw new RuntimeException("Could not change an order status");
         }
 
     }

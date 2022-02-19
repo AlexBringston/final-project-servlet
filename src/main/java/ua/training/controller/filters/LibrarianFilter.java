@@ -16,7 +16,7 @@ public class LibrarianFilter implements Filter {
             chain.doFilter(request, response);
         }
         else {
-            throw new RuntimeException("error.auth");
+            throw new RuntimeException("You cannot enter this page");
         }
 
     }

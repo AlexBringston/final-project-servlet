@@ -1,5 +1,8 @@
 package ua.training.model.dao.impl;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.training.model.dao.BookDAO;
 import ua.training.model.dao.mappers.AuthorMapper;
 import ua.training.model.dao.mappers.BookMapper;
@@ -15,6 +18,7 @@ import java.util.Set;
 public class JDBCBookDAO implements BookDAO {
 
     private final Connection connection;
+    private final Logger logger = LogManager.getLogger(JDBCBookDAO.class);
 
     public JDBCBookDAO(Connection connection) {
         this.connection = connection;
@@ -37,8 +41,9 @@ public class JDBCBookDAO implements BookDAO {
             preparedStatement.setInt(9, entity.getAmountOfBooksTaken());
             int result = preparedStatement.executeUpdate();
             return result != 0;
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception exception) {
+            logger.log(Level.WARN, exception.getMessage());
+            throw new RuntimeException("Could not create a book");
         }
     }
 
@@ -58,8 +63,9 @@ public class JDBCBookDAO implements BookDAO {
                 BookMapper bookMapper = new BookMapper();
                 book = bookMapper.extractFromResultSet(resultSet);
             }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception exception) {
+            logger.log(Level.WARN, exception.getMessage());
+            throw new RuntimeException("Could not find a book by given id");
         }
         return book;
     }
@@ -78,8 +84,9 @@ public class JDBCBookDAO implements BookDAO {
                 BookMapper bookMapper = new BookMapper();
                 books.add(bookMapper.extractFromResultSet(resultSet));
             }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception exception) {
+            logger.log(Level.WARN, exception.getMessage());
+            throw new RuntimeException("Could not find all books");
         }
         return books;
     }
@@ -104,8 +111,9 @@ public class JDBCBookDAO implements BookDAO {
             System.out.println(preparedStatement);
             int result = preparedStatement.executeUpdate();
             return result != 0;
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception exception) {
+            logger.log(Level.WARN, exception.getMessage());
+            throw new RuntimeException("Could not update a book");
         }
     }
 
@@ -140,8 +148,9 @@ public class JDBCBookDAO implements BookDAO {
                 BookMapper bookMapper = new BookMapper();
                 books.add(bookMapper.extractFromResultSet(resultSet));
             }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception exception) {
+            logger.log(Level.WARN, exception.getMessage());
+            throw new RuntimeException("Could not find any book by given query");
         } finally {
             ConnectionManager.close(connection);
         }
@@ -167,8 +176,9 @@ public class JDBCBookDAO implements BookDAO {
                 BookMapper bookMapper = new BookMapper();
                 books.add(bookMapper.extractFromResultSet(resultSet));
             }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception exception) {
+            logger.log(Level.WARN, exception.getMessage());
+            throw new RuntimeException("Could not find any available book");
         } finally {
             ConnectionManager.close(connection);
         }
@@ -184,8 +194,9 @@ public class JDBCBookDAO implements BookDAO {
             if (resultSet.next()) {
                 return resultSet.getInt(1);
             } else return 0;
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception exception) {
+            logger.log(Level.WARN, exception.getMessage());
+            throw new RuntimeException("Could not count available books");
         }
     }
 
@@ -205,8 +216,9 @@ public class JDBCBookDAO implements BookDAO {
             if (resultSet.next()) {
                 return resultSet.getInt(1);
             } else return 0;
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception exception) {
+            logger.log(Level.WARN, exception.getMessage());
+            throw new RuntimeException("Could not count available books with given parameters");
         }
     }
 
@@ -223,8 +235,9 @@ public class JDBCBookDAO implements BookDAO {
                 AuthorMapper authorMapper = new AuthorMapper();
                 authors.add(authorMapper.extractFromResultSet(resultSet));
             }
-        } catch (Exception ex) {
-            throw new RuntimeException(ex);
+        } catch (Exception exception) {
+            logger.log(Level.WARN, exception.getMessage());
+            throw new RuntimeException("Could not find additional authors of a book");
         }
         return authors;
     }
@@ -238,7 +251,8 @@ public class JDBCBookDAO implements BookDAO {
             int result = preparedStatement.executeUpdate();
             return result != 0;
         } catch (Exception exception) {
-            throw new RuntimeException(exception);
+            logger.log(Level.WARN, exception.getMessage());
+            throw new RuntimeException("Could not remove book's additional author");
         }
     }
 
@@ -251,7 +265,8 @@ public class JDBCBookDAO implements BookDAO {
             int result = preparedStatement.executeUpdate();
             return result != 0;
         } catch (Exception exception) {
-            throw new RuntimeException(exception);
+            logger.log(Level.WARN, exception.getMessage());
+            throw new RuntimeException("Could not add book's additional author");
         }
     }
 
