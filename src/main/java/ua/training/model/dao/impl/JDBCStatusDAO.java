@@ -37,7 +37,7 @@ public class JDBCStatusDAO implements StatusDAO {
     public Status findById(Long id) {
         Status status = new Status();
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("SELECT s.id AS status_id, s.name AS status_name FROM statuses AS" +
+                     connection.prepareStatement("SELECT s.id AS status_id, s.name AS status_name FROM statuses AS" +
                              " s WHERE s.id = ?")) {
             preparedStatement.setLong(1, id);
             ResultSet rs = preparedStatement.executeQuery();

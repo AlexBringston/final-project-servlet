@@ -9,6 +9,9 @@ import ua.training.model.utils.Constants;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 
+/**
+ * Command used to display a default page (index)
+ */
 public class DefaultPageCommand implements Command {
 
     private final BookService bookService;

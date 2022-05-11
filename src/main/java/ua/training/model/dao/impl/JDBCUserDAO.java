@@ -43,11 +43,12 @@ public class JDBCUserDAO implements UserDAO {
     @Override
     public User findById(Long id) {
         User user = new User();
-        try (PreparedStatement ps = connection.prepareCall("SELECT u.id AS user_id, u.name AS user_name, u.surname, u.username, u.password, " +
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT u.id AS user_id, u.name AS user_name, u" +
+                ".surname, u.username, u.password, " +
                 "u.birth_date, u.is_account_non_blocked, r.id AS role_id, r.name AS role_name FROM users AS u JOIN " +
                 "roles as r ON u.role_id = r.id WHERE u.id = ?")) {
-            ps.setLong(1, id);
-            ResultSet rs = ps.executeQuery();
+            preparedStatement.setLong(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
             UserMapper mapper = new UserMapper();
             if (rs.next()) {
                 user = mapper.extractFromResultSet(rs);
@@ -62,7 +63,7 @@ public class JDBCUserDAO implements UserDAO {
     @Override
     public List<User> findAll() {
         List<User> users = new ArrayList<>();
-        try (PreparedStatement ps = connection.prepareCall("SELECT u.id AS user_id, u.name AS user_name, u.surname, u.username, u.password, " +
+        try (PreparedStatement ps = connection.prepareStatement("SELECT u.id AS user_id, u.name AS user_name, u.surname, u.username, u.password, " +
                 "u.birth_date, u.is_account_non_blocked, r.id AS role_id, r.name AS role_name FROM users AS u JOIN " +
                 "roles as r ON u.role_id = r.id")) {
             ResultSet rs = ps.executeQuery();
@@ -104,7 +105,7 @@ public class JDBCUserDAO implements UserDAO {
     @Override
     public Optional<User> findByUsername(String username) {
         Optional<User> user = Optional.empty();
-        try (PreparedStatement preparedStatement = connection.prepareCall("SELECT u.id AS user_id, u.name AS user_name," +
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT u.id AS user_id, u.name AS user_name," +
                 " u.surname, u.username, u.password, " +
                 "u.birth_date, u.is_account_non_blocked, r.id AS role_id, r.name AS role_name FROM users AS u JOIN " +
                 "roles as r ON u.role_id = r.id WHERE username = ?")) {
@@ -124,7 +125,7 @@ public class JDBCUserDAO implements UserDAO {
     @Override
     public List<User> findAllByRole(Role role, Integer limit, Integer offset, String sortField, String sortDirection) {
         List<User> users = new ArrayList<>();
-        try (PreparedStatement preparedStatement = connection.prepareCall("SELECT u.id AS user_id, u.name AS user_name, " +
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT u.id AS user_id, u.name AS user_name, " +
                 "u.surname, u.username, u.password, " +
                 "u.birth_date, u.is_account_non_blocked, r.id AS role_id, r.name AS role_name FROM users AS u JOIN " +
                 "roles as r ON u.role_id = r.id WHERE role_id = ? ORDER BY " + sortField + " " + sortDirection + " LIMIT ? OFFSET ?;")) {

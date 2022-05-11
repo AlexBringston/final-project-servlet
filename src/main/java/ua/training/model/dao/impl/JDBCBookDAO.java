@@ -27,7 +27,7 @@ public class JDBCBookDAO implements BookDAO {
     @Override
     public boolean create(Book entity) {
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("INSERT INTO books (name, only_for_reading_hall, " +
+                     connection.prepareStatement("INSERT INTO books (name, only_for_reading_hall, " +
                              "is_available, publisher_id, quantity, published_at, img_url, main_author_id," +
                              "amount_of_books_taken) VALUES(?,?,?,?,?,?,?,?,?)")) {
             preparedStatement.setString(1, entity.getName());
@@ -51,7 +51,7 @@ public class JDBCBookDAO implements BookDAO {
     public Book findById(Long id) {
         Book book = new Book.Builder().build();
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("SELECT b.id AS book_id, b.name AS book_name, b.only_for_reading_hall, " +
+                     connection.prepareStatement("SELECT b.id AS book_id, b.name AS book_name, b.only_for_reading_hall, " +
                              "b.is_available, p.id AS " +
                              "publisher_id, p.name AS publisher_name, b.quantity, b.published_at, b.img_url, a.id as " +
                              "author_id, a.name as author_name, a.surname as author_surname, b.amount_of_books_taken " +
@@ -94,7 +94,7 @@ public class JDBCBookDAO implements BookDAO {
     @Override
     public boolean update(Book entity) {
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("UPDATE books SET name = ?, only_for_reading_hall = ?, " +
+                     connection.prepareStatement("UPDATE books SET name = ?, only_for_reading_hall = ?, " +
                              "is_available = ?, publisher_id = ?, quantity = ?, published_at = ?, " +
                              "img_url = ?, main_author_id = ?, amount_of_books_taken = ? WHERE " +
                              "id = ?")) {
@@ -127,7 +127,7 @@ public class JDBCBookDAO implements BookDAO {
                                             String sortDirection) {
         List<Book> books = new ArrayList<>();
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("SELECT b.id as book_id, b.name as book_name, b.only_for_reading_hall, b.is_available, p.id AS " +
+                     connection.prepareStatement("SELECT b.id as book_id, b.name as book_name, b.only_for_reading_hall, b.is_available, p.id AS " +
                              "publisher_id, p.name AS publisher_name, b.quantity, b.published_at, b.img_url, a.id as " +
                              "author_id, a.name as author_name, a.surname as author_surname, b.amount_of_books_taken " +
                              "FROM books AS b JOIN publishers as p ON p.id = b.publisher_id JOIN authors AS a on a.id" +
@@ -162,7 +162,7 @@ public class JDBCBookDAO implements BookDAO {
                                            String sortDirection) {
         List<Book> books = new ArrayList<>();
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("SELECT b.id as book_id, b.name as book_name, b.only_for_reading_hall, b.is_available, p.id AS " +
+                     connection.prepareStatement("SELECT b.id as book_id, b.name as book_name, b.only_for_reading_hall, b.is_available, p.id AS " +
                              "publisher_id, p.name AS publisher_name, b.quantity, b.published_at, b.img_url, a.id as " +
                              "author_id, a.name as author_name, a.surname as author_surname, b.amount_of_books_taken " +
                              "FROM books AS b JOIN publishers as p ON p.id = b.publisher_id JOIN authors AS a on a.id" +
@@ -226,7 +226,7 @@ public class JDBCBookDAO implements BookDAO {
     public Set<Author> findAdditionalAuthorsOfBook(Long bookId) {
         Set<Author> authors = new HashSet<>();
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("SELECT a.id as author_id, a.name as author_name, a.surname as " +
+                     connection.prepareStatement("SELECT a.id as author_id, a.name as author_name, a.surname as " +
                              "author_surname FROM authors_books JOIN authors AS a ON authors_books.author_id = a.id " +
                              "WHERE authors_books.book_id = ?")) {
             preparedStatement.setLong(1, bookId);

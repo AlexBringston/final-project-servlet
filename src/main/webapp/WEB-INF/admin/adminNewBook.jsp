@@ -27,24 +27,34 @@
                 <form action="${pageContext.request.contextPath}/app/admin/manageBook?action=add" method="post"
                       class="new-book">
                     <label for="name">Book name</label>
-                    <input type="text" id="name" placeholder="Назва книги" name="name">
+                    <input type="text" id="name" placeholder="12 best Italian recipes" name="name" pattern="^(?!\s*$).+" required>
+
                     <div class="checkboxDiv">
                         <label for="checkbox">Is only for reading hall</label>
                         <input type="checkbox" id="checkbox" name="onlyForReadingHall">
                     </div>
+
                     <label for="publisher">Publisher</label>
-                    <input type="text" id="publisher" placeholder="Publisher" name="publisher.name">
+                    <input type="text" id="publisher" placeholder="Orion" name="publisher.name" pattern="^(?!\s*$).+" required>
+
                     <label for="publishedAt">Published at</label>
-                    <input type="date" placeholder="Рік видання" id="publishedAt" name="publishedAt">
+                    <input type="date" placeholder="Рік видання" id="publishedAt" name="publishedAt" required>
+
                     <label for="quantity">Quantity</label>
-                    <input type="number" min="1" id="quantity" placeholder="Кількість екземплярів" name="quantity">
+                    <input type="number" min="1" id="quantity" placeholder="Кількість екземплярів" name="quantity" required>
+
                     <label for="imgURL">Image URL</label>
-                    <input type="text" id="imgURL" placeholder="Image URL" name="imgUrl">
+                    <input type="text" id="imgURL" placeholder="http://dummyimage.com/117x100.png/dddddd/000000"
+                           name="imgUrl" required>
+
                     <label for="mainAuthorName">Main author name</label>
-                    <input type="text" id="mainAuthorName" placeholder="Main author name" name="mainAuthor.name">
+                    <input type="text" id="mainAuthorName" placeholder="Main author name" name="mainAuthor.name"
+                           pattern="^(?!\s*$).+" required>
+
                     <label for="mainAuthorSurname">Main author surname</label>
                     <input type="text" id="mainAuthorSurname" placeholder="Main author surname"
-                           name="mainAuthor.surname">
+                           name="mainAuthor.surname" pattern="^(?!\s*$).+" required>
+
                     <button type="submit" name="action" value="save">Save</button>
                 </form>
 

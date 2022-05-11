@@ -13,6 +13,9 @@ import java.util.Set;
 
 import static ua.training.model.utils.RegEx.USERNAME_REGEX;
 
+/**
+ * Command used to implement login on site
+ */
 public class LoginCommand implements Command {
 
     private final UserService userService;

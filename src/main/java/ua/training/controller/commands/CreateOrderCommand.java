@@ -26,8 +26,6 @@ public class CreateOrderCommand implements Command{
         Connection connection = ConnectionManager.getConnection();
         try {
             User user = (User) request.getSession().getAttribute("loggedUser");
-            System.out.println(bookId);
-            System.out.println(user.getId());
             orderService.createOrderOnGivenBook(user.getId(), bookId, connection);
             ConnectionManager.close(connection);
         } catch (Exception exception) {

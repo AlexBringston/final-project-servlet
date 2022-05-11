@@ -30,24 +30,26 @@
                     <input type="hidden" name="bookId" value="${requestScope.book.id}">
                     <label for="newAuthorName">Author to add (Name)</label>
                     <div class="new-book-authors">
-                        <input type="text" id="newAuthorName" placeholder="Author name" name="additionalAuthorName">
+                        <input type="text" id="newAuthorName" placeholder="Antonio" name="additionalAuthorName">
                     </div>
                     <label for="newAuthorSurname">Author to add (Surname)</label>
                     <div class="new-book-authors">
-                        <input type="text"  id="newAuthorSurname" placeholder="Author surname"
-                               name="additionalAuthorSurname">
+                        <input type="text"  id="newAuthorSurname" placeholder="Giovanni"
+                               name="additionalAuthorSurname" pattern="[A-Za-z0-9]+|[\u0400-\u04ff']+" required>
                     </div>
                     <button type="submit" id="submit-author" name="operation" value="+">Add author</button>
-                    <label for="presentAuthors">Present authors</label>
-                    <div class="new-book-authors">
-                        <select id="presentAuthors" class="new-book-select" name="authorToDelete">
-                            <c:forEach var="author" items="${requestScope.authors}">
-                                <option>${author.name} ${author.surname}</option>
-                            </c:forEach>
+                    <c:if test="${requestScope.authors.size() > 0}">
+                        <label for="presentAuthors">Present authors</label>
+                        <div class="new-book-authors">
+                            <select id="presentAuthors" class="new-book-select" name="authorToDelete">
+                                <c:forEach var="author" items="${requestScope.authors}">
+                                    <option>${author.name} ${author.surname}</option>
+                                </c:forEach>
+                            </select>
+                            <input type="submit" name="operation" value="-">
+                        </div>
+                    </c:if>
 
-                        </select>
-                        <input type="submit" name="operation" value="-">
-                    </div>
 
                     <input type="submit" name="operation" value="finish"/>
                 </form>

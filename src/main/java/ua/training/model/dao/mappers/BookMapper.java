@@ -6,6 +6,7 @@ import ua.training.model.entities.Publisher;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.ZoneId;
 
 public class BookMapper implements ObjectMapper<Book>{
@@ -18,7 +19,7 @@ public class BookMapper implements ObjectMapper<Book>{
                 .available(resultSet.getBoolean("is_available"))
                 .publisher(new Publisher(resultSet.getLong("publisher_id"),resultSet.getString("publisher_name")))
                 .quantity(resultSet.getInt("quantity"))
-                .publishedAt(resultSet.getDate("published_at").toLocalDate())
+                .publishedAt(LocalDate.parse(resultSet.getString("published_at")))
                 .imgUrl(resultSet.getString("img_url"))
                 .mainAuthor(new Author(resultSet.getLong("author_id"),resultSet.getString("author_name"),
                         resultSet.getString("author_surname")))

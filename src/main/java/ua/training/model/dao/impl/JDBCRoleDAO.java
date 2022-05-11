@@ -37,7 +37,7 @@ public class JDBCRoleDAO implements RoleDAO {
     public Role findById(Long id) {
         Role role = new Role();
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("SELECT r.id AS role_id, r.name AS role_name FROM roles AS" +
+                     connection.prepareStatement("SELECT r.id AS role_id, r.name AS role_name FROM roles AS" +
                              " r WHERE r.id = ?")) {
             preparedStatement.setLong(1, id);
             ResultSet rs = preparedStatement.executeQuery();

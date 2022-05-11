@@ -25,7 +25,7 @@ public class JDBCAuthorDAO implements AuthorDAO {
     public Optional<Author> findByNameContainingAndSurnameContaining(String name, String surname) {
         Optional<Author> author = Optional.empty();
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("SELECT a.id AS author_id, a.name AS author_name, a.surname AS " +
+                     connection.prepareStatement("SELECT a.id AS author_id, a.name AS author_name, a.surname AS " +
                              "author_surname FROM authors AS a WHERE a.name = ? AND a" +
                              ".surname = ?")) {
             preparedStatement.setString(1, name);
@@ -59,7 +59,7 @@ public class JDBCAuthorDAO implements AuthorDAO {
     public Author findById(Long id) {
         Author author = new Author();
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("SELECT a.id AS author_id, a.name AS author_name, a.surname AS " +
+                     connection.prepareStatement("SELECT a.id AS author_id, a.name AS author_name, a.surname AS " +
                              "author_surname FROM authors AS a WHERE a.name = ? AND a.id = ?")) {
             preparedStatement.setLong(1, id);
             ResultSet rs = preparedStatement.executeQuery();

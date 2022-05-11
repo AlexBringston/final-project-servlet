@@ -12,4 +12,4 @@ for (let i = 0; i < acc.length; i++) {
 
 document.getElementById('date').valueAsDate = new Date();
 
-document.getElementById('birthDate').valueAsDate = new Date();
+document.getElementById('reg-date').valueAsDate = new Date();

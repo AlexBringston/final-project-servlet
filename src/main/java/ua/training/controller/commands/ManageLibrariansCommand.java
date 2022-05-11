@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Command used to remove librarians or to display them
+ */
 public class ManageLibrariansCommand implements Command {
 
     private final UserService userService;

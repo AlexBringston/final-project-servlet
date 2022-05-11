@@ -1,6 +1,7 @@
 package ua.training.model.dto;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Page<T> {
     private List<T> objects;
@@ -164,5 +165,34 @@ public class Page<T> {
 
     public void setQuery(String query) {
         this.query = query;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Page)) return false;
+        Page<?> page = (Page<?>) o;
+        return Objects.equals(getObjects(), page.getObjects()) && Objects.equals(getCurrentPage(), page.getCurrentPage()) && Objects.equals(getSortField(), page.getSortField()) && Objects.equals(getSortDirection(), page.getSortDirection());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getObjects(), getFirstPage(), getCurrentPage(), getLastPage(), getPreviousPage(), getNextPage(), getTotalPages(), getSortField(), getSortDirection(), getQuery());
+    }
+
+    @Override
+    public String toString() {
+        return "Page{" +
+                "objects=" + objects +
+                ", firstPage=" + firstPage +
+                ", currentPage=" + currentPage +
+                ", lastPage=" + lastPage +
+                ", previousPage=" + previousPage +
+                ", nextPage=" + nextPage +
+                ", totalPages=" + totalPages +
+                ", sortField='" + sortField + '\'' +
+                ", sortDirection='" + sortDirection + '\'' +
+                ", query='" + query + '\'' +
+                '}';
     }
 }

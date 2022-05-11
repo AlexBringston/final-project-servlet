@@ -17,6 +17,9 @@ import java.util.Set;
 
 import static ua.training.model.utils.RegEx.*;
 
+/**
+ * Command used to manage all operations available for admin to perform with books
+ */
 public class ManageBookCommand implements Command {
 
     private final BookService bookService;

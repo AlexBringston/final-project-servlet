@@ -16,13 +16,26 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Main controller used to manage all requests and redirect them to corresponding commands
+ */
 public class Controller extends HttpServlet {
 
+    /**
+     * Map of all commands available in system
+     */
     private final Map<String, Command> commands = new HashMap<>();
+
+    /**
+     * Logger instance
+     */
     private final Logger logger = LogManager.getLogger(Controller.class);
 
+    /**
+     * Init method to initialize map with commands and their mappings
+     */
     @Override
-    public void init() throws ServletException {
+    public void init(){
         BookService bookService = new BookService();
         UserService userService = new UserService();
         OrderService orderService = new OrderService();

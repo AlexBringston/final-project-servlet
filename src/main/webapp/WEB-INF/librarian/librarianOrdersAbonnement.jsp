@@ -37,13 +37,11 @@
                         <label for="date">Введіть дату повернення книги:</label>
                         <input id="date" type="date" name="returnDate">
                         <label for="penalty">Введіть суму штрафу:</label>
-                        <input id="penalty" type="number" min="0" name="penalty">
+                        <input id="penalty" type="number" min="0" name="penalty" required>
                         <input type="submit" value="Видати">
                     </form>
                 </div>
                 <div class="error-p">
-                    <p><span>Помилка: </span>введено невірний пароль</p>
-                    <p><span>Помилка: </span>введено невірний пароль</p>
                 </div>
             </div>
         </div>

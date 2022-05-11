@@ -26,17 +26,21 @@
                 <form action="${pageContext.request.contextPath}/app/registration" method="post">
                     <div class="authorize-form reg">
                         <label for="reg-name"><fmt:message key="placeholder.enter.name"/> :</label>
-                        <input id="reg-name" name="name" type="text" placeholder="Anthony">
+                        <input id="reg-name" name="name" type="text" placeholder="Anthony"
+                               pattern="[A-Z][a-z]+|\u0400-\u042F][\u0430-\u04FF']+" required>
                         <label for="reg-surname"><fmt:message key="placeholder.enter.surname"/>:</label>
-                        <input id="reg-surname" name="surname" type="text" placeholder="Hopkins">
+                        <input id="reg-surname" name="surname" type="text" placeholder="Hopkins"
+                               pattern="[A-Z][a-z]+|\u0400-\u042F][\u0430-\u04FF']+" required>
                         <label for="reg-login"><fmt:message key="placeholder.enter.login"/>:</label>
-                        <input id="reg-login" name="username" type="text" placeholder="tony_13_hopkins">
+                        <input id="reg-login" name="username" type="text" placeholder="tony_13_hopkins"
+                               pattern="^[A-Za-z][A-Za-z0-9_]{1,20}$" required>
                         <label for="reg-password"><fmt:message key="placeholder.enter.password"/>:</label>
-                        <input id="reg-password" name="password" type="password">
+                        <input id="reg-password" name="password" type="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$" required>
                         <label for="reg-date"><fmt:message key="placeholder.enter.birth.date"/>:</label>
                         <input id="reg-date" name="birthDate" type="date">
                         <input type="submit" value="Register">
-                        <p>Вже маєте акаунт? <a href="${pageContext.request.contextPath}/app/login">Увійти</a></p>
+                        <p><fmt:message key="title.already.registered"/> <a
+href="${pageContext.request.contextPath}/app/login"><fmt:message key="button.login"/></a></p>
                     </div>
                 </form>
             </div>

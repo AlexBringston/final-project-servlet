@@ -37,7 +37,7 @@ public class JDBCPublisherDAO implements PublisherDAO {
     public Publisher findById(Long id) {
         Publisher publisher = new Publisher();
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("SELECT p.id AS publisher_id, p.name AS publisher_name FROM publishers AS" +
+                     connection.prepareStatement("SELECT p.id AS publisher_id, p.name AS publisher_name FROM publishers AS" +
                              " p WHERE p.id = ?")) {
             preparedStatement.setLong(1, id);
             ResultSet rs = preparedStatement.executeQuery();
@@ -90,7 +90,7 @@ public class JDBCPublisherDAO implements PublisherDAO {
     public Optional<Publisher> findByName(String name) {
         Optional<Publisher> publisher = Optional.empty();
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("SELECT p.id AS publisher_id, p.name AS publisher_name FROM publishers AS" +
+                     connection.prepareStatement("SELECT p.id AS publisher_id, p.name AS publisher_name FROM publishers AS" +
                              " p WHERE p.name = ?")) {
             preparedStatement.setString(1, name);
             ResultSet rs = preparedStatement.executeQuery();

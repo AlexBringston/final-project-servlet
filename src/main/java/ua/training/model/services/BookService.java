@@ -23,14 +23,33 @@ import java.util.Set;
 
 public class BookService {
 
+    /**
+     * DAOFactory instance to generate different DAOs
+     */
     private final DAOFactory daoFactory = DAOFactory.getInstance();
+
+    /**
+     * Logger instance
+     */
     private final Logger logger = LogManager.getLogger(BookService.class);
 
+    /**
+     * Method to save a book
+     * @param book - book instance
+     * @param connection - connection instance
+     * @return - boolean if action is successful
+     */
     public boolean saveBook(Book book, Connection connection) {
         BookDAO bookDAO = daoFactory.createBookDAO(connection);
         return bookDAO.create(book);
     }
 
+    /**
+     * Method to delete a book
+     * @param book - book instance
+     * @param connection - connection instance
+     * @return - boolean if action if successful
+     */
     public boolean deleteBook(Book book, Connection connection) {
         BookDAO bookDAO = daoFactory.createBookDAO(connection);
         book.setAvailable(false);
@@ -38,6 +57,16 @@ public class BookService {
         return bookDAO.update(book);
     }
 
+    /**
+     * Method used to find books per page
+     * @param query - query used to search books
+     * @param limit - limit of books on page
+     * @param page - number of page
+     * @param sortField - field of sorting
+     * @param sortDirection - direction of sorting
+     * @param connection - connection instance
+     * @return - Page object with list of books
+     */
     public Page<Book> findBooks(String query, Integer limit, Integer page,
                                 String sortField, String sortDirection, Connection connection) {
         BookDAO bookDAO = daoFactory.createBookDAO(connection);
@@ -61,6 +90,12 @@ public class BookService {
                 .build();
     }
 
+    /**
+     * Method used to find a book by id
+     * @param bookId - id of book
+     * @param connection - connection instance
+     * @return - book instance
+     */
     public Book findBookById(Long bookId, Connection connection) {
         BookDAO bookDAO = daoFactory.createBookDAO(connection);
         Book book = bookDAO.findById(bookId);
@@ -68,6 +103,15 @@ public class BookService {
         return book;
     }
 
+    /**
+     * Method to get all available books per page
+     * @param limit - limit of instances per page
+     * @param page - number of page
+     * @param sortField - field of sorting
+     * @param sortDirection - direction of sorting
+     * @param connection - connection instance
+     * @return - page object of books list
+     */
     public Page<Book> getAllAvailableBooks(Integer limit, Integer page,
                                            String sortField, String sortDirection, Connection connection) {
         BookDAO bookDAO = daoFactory.createBookDAO(connection);
@@ -90,29 +134,60 @@ public class BookService {
                 .build();
     }
 
+    /**
+     * Method used to check if author exists
+     * @param author - author instance
+     * @param connection - connection instance
+     * @return - true if author exists, false otherwise
+     */
     public boolean checkIfAuthorExists(Author author, Connection connection) {
         AuthorDAO authorDAO = daoFactory.createAuthorDAO(connection);
         return authorDAO.findByNameContainingAndSurnameContaining(author.getName(),
                 author.getSurname()).isPresent();
     }
 
+    /**
+     * Method used to check if author exists
+     * @param publisher - publisher instance
+     * @param connection - connection instance
+     * @return - true if author exists, false otherwise
+     */
     public boolean checkIfPublisherExists(Publisher publisher, Connection connection) {
         PublisherDAO publisherDAO = daoFactory.createPublisherDAO(connection);
         return publisherDAO.findByName(publisher.getName()).isPresent();
     }
 
+    /**
+     * Method used to get author from database
+     * @param author - author instance
+     * @param connection - connection instance
+     * @return - found author instance or exception is thrown
+     */
     public Author getAuthor(Author author, Connection connection) {
         AuthorDAO authorDAO = daoFactory.createAuthorDAO(connection);
         return authorDAO.findByNameContainingAndSurnameContaining(author.getName(),
                 author.getSurname()).orElseThrow(() -> new IllegalArgumentException("There is no such author"));
     }
 
+    /**
+     * Method used to get publisher from database
+     * @param publisher - publisher instance
+     * @param connection - connection instance
+     * @return - found publisher instance or exception is thrown
+     */
     public Publisher getPublisher(Publisher publisher, Connection connection) {
         PublisherDAO publisherDAO = daoFactory.createPublisherDAO(connection);
         return publisherDAO.findByName(publisher.getName()).orElseThrow(() -> new IllegalArgumentException("There is " +
                 "no such publisher"));
     }
 
+    /**
+     * Method used to update book authors
+     * @param bookId - id of book to be updated
+     * @param authors - set of authors
+     * @param connection - connection instance
+     * @return - boolean if update was successfully performed
+     */
     public boolean updateBookAuthors(Long bookId, Set<Author> authors, Connection connection) {
         BookDAO bookDAO = daoFactory.createBookDAO(connection);
         try {

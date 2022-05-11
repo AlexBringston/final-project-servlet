@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Command used to change abonnement entry status
+ */
 public class ChangeAbonnementStatus implements Command{
 
     private final OrderService orderService;

@@ -8,6 +8,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
+/**
+ * Command used to create a new entry in abonnement
+ */
 public class AddOrderToAbonnementCommand implements Command{
 
     private final OrderService orderService;

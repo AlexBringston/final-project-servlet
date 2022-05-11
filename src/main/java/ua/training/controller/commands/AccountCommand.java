@@ -5,6 +5,9 @@ import ua.training.model.entities.User;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
 
+/**
+ * Command to display account page for every role or non-authorized user
+ */
 public class AccountCommand implements Command{
     @Override
     public String execute(HttpServletRequest request) throws SQLException {

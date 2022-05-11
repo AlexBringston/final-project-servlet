@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Command used to logout from site
+ */
 public class LogoutCommand implements Command{
     @Override
     public String execute(HttpServletRequest request) throws SQLException {

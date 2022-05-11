@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Command used to display users to admin or to manage different actions on them by him
+ */
 public class ViewUsersCommand implements Command{
 
     private final UserService userService;
@@ -49,5 +52,3 @@ public class ViewUsersCommand implements Command{
         }
     }
 }
-
-//todo unite view role users

@@ -44,7 +44,7 @@
                             </div>
                             <div class="panel">
                                 <p>
-                                    Ordered by: ${request.user.name} ${request.user.surname}
+                                    <fmt:message key="title.ordered.by"/> : ${request.user.name} ${request.user.surname}
                                 </p>
                             </div>
                         </div>

@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Command used to display current pending orders to librarian
+ */
 public class ViewOrdersCommand implements Command {
 
     private final OrderService orderService;

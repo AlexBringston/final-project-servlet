@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Command used to implement management of order entries currently pending
+ */
 public class OrderManagementCommand implements Command{
 
     private final OrderService orderService;

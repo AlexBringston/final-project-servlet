@@ -23,18 +23,23 @@
         <div class="books-wrap">
             <jsp:include page="/WEB-INF/admin/side-bar.jsp"/>
             <div class="go-to">
-                <p>Додати бібліотекаря</p>
+                <p><fmt:message key="button.add.librarian"/>/p>
                 <form action="${pageContext.request.contextPath}/app/admin/addLibrarian" class="new-book" method="post">
                     <label for="name"><fmt:message key="placeholder.enter.name" />:</label>
-                    <input type="text" id="name" name="name" placeholder="">
+                    <input type="text" id="name" name="name" placeholder="Jonathan">
+
                     <label for="surname"><fmt:message key="placeholder.enter.surname" />:</label>
-                    <input type="text" id="surname" name="surname" placeholder="">
+                    <input type="text" id="surname" name="surname" placeholder="Smith">
+
                     <label for="login"><fmt:message key="placeholder.enter.login" />:</label>
-                    <input type="text" id="login" name="username" placeholder="">
+                    <input type="text" id="login" name="username" placeholder="John11_03Smith">
+
                     <label for="password"><fmt:message key="placeholder.enter.password" />:</label>
                     <input type="password" id="password" name="password" placeholder="">
+
                     <label for="date"><fmt:message key="placeholder.enter.birth.date" />:</label>
                     <input id="date" type="date" name="birthDate">
+
                     <input type="submit" value="<fmt:message key="button.register" />">
                 </form>
             </div>

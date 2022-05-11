@@ -42,7 +42,7 @@ public class JDBCReadingRoomDAO implements ReadingRoomDAO {
     @Override
     public ReadingRoom findById(Long id) {
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("SELECT room.id as room_id, room.user_id, room.book_id, s.id AS " +
+                     connection.prepareStatement("SELECT room.id as room_id, room.user_id, room.book_id, s.id AS " +
                              "status_id, " +
                              "s.name AS status_name, u.id AS user_id, u.name AS user_name, u.surname, u.username, u.password, " +
                              "u.birth_date, r.id as role_id, r.name as role_name, u.is_account_non_blocked, b.id as book_id, " +
@@ -71,7 +71,7 @@ public class JDBCReadingRoomDAO implements ReadingRoomDAO {
     public List<ReadingRoom> findAll() {
         List<ReadingRoom> readingRoomList = new ArrayList<>();
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("SELECT room.id as room_id, room.user_id, room.book_id, s.id AS " +
+                     connection.prepareStatement("SELECT room.id as room_id, room.user_id, room.book_id, s.id AS " +
                              "status_id, " +
                              "s.name AS status_name, u.id AS user_id, u.name AS user_name, u.surname, u.username, u.password, " +
                              "u.birth_date, r.id as role_id, r.name as role_name, u.is_account_non_blocked, b.id as book_id, " +
@@ -119,7 +119,7 @@ public class JDBCReadingRoomDAO implements ReadingRoomDAO {
     public List<ReadingRoom> findBooksCurrentlyInReadingRoom(String status, Integer limit, Integer offset, String sortField, String sortDirection) {
         List<ReadingRoom> readingRoomList = new ArrayList<>();
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("SELECT room.id as room_id, room.user_id, room.book_id, s.id AS " +
+                     connection.prepareStatement("SELECT room.id as room_id, room.user_id, room.book_id, s.id AS " +
                              "status_id, " +
                              "s.name AS status_name, u.id AS user_id, u.name AS user_name, u.surname, u.username, u.password, " +
                              "u.birth_date, r.id as role_id, r.name as role_name, u.is_account_non_blocked, b.id as book_id, " +
@@ -168,7 +168,7 @@ public class JDBCReadingRoomDAO implements ReadingRoomDAO {
     public Optional<ReadingRoom> findBookTakenByUser(Long userId, Long bookId) {
         Optional<ReadingRoom> readingRoom = Optional.empty();
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("SELECT room.id as room_id, room.user_id, room.book_id, s.id AS " +
+                     connection.prepareStatement("SELECT room.id as room_id, room.user_id, room.book_id, s.id AS " +
                              "status_id, " +
                              "s.name AS status_name, u.id AS user_id, u.name AS user_name, u.surname, u.username, u.password, " +
                              "u.birth_date, r.id as role_id, r.name as role_name, u.is_account_non_blocked, b.id as book_id, " +
@@ -198,7 +198,7 @@ public class JDBCReadingRoomDAO implements ReadingRoomDAO {
     public List<ReadingRoom> findAllByStatus(String status) {
         List<ReadingRoom> readingRoomList = new ArrayList<>();
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("SELECT room.id as room_id, room.user_id, room.book_id, s.id AS " +
+                     connection.prepareStatement("SELECT room.id as room_id, room.user_id, room.book_id, s.id AS " +
                              "status_id, " +
                              "s.name AS status_name, u.id AS user_id, u.name AS user_name, u.surname, u.username, u.password, " +
                              "u.birth_date, r.id as role_id, r.name as role_name, u.is_account_non_blocked, b.id as book_id, " +

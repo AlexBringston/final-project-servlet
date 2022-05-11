@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Command used to display readers in system for librarian to use
+ */
 public class ViewReadersCommand implements Command{
 
     private final UserService userService;
@@ -39,5 +42,3 @@ public class ViewReadersCommand implements Command{
         return "/WEB-INF/librarian/librarianReaders.jsp";
     }
 }
-
-//todo unite view role users

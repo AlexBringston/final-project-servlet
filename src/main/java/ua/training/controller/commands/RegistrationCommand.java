@@ -11,6 +11,9 @@ import java.time.LocalDate;
 import static ua.training.model.utils.RegEx.*;
 import static ua.training.model.utils.RegEx.PASSWORD_REGEX;
 
+/**
+ * Command used to implement registration mechanism
+ */
 public class RegistrationCommand implements Command{
 
     private final UserService userService;

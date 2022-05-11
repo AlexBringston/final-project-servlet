@@ -13,11 +13,23 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class OrderService {
-
+    /**
+     * DAOFactory instance to generate different DAOs
+     */
     private final DAOFactory daoFactory = DAOFactory.getInstance();
+
+    /**
+     * Logger instance
+     */
     private final Logger logger = LogManager.getLogger(OrderService.class);
 
-    public void createOrderOnGivenBook(Long userId, Long bookId, Connection connection) throws SQLException {
+    /**
+     * Method user to create an order on given book for given user
+     * @param userId - id of user
+     * @param bookId - id of book
+     * @param connection - connection instance
+     */
+    public void createOrderOnGivenBook(Long userId, Long bookId, Connection connection) {
         try {
             connection.setAutoCommit(false);
             BookDAO bookDao = daoFactory.createBookDAO(connection);
@@ -46,6 +58,15 @@ public class OrderService {
         }
     }
 
+    /**
+     * Method used to get all pending requests
+     * @param limit - limit of instances per page
+     * @param page - number of current page
+     * @param sortField - field of sorting
+     * @param sortDirection - direction of sorting
+     * @param connection - connection instance
+     * @return - page object of requests per page
+     */
     public Page<Request> getAllPendingRequests(Integer limit, Integer page, String sortField,
                                                String sortDirection, Connection connection) {
         RequestDAO requestDAO = daoFactory.createRequestDAO(connection);
@@ -68,6 +89,15 @@ public class OrderService {
                 .build();
     }
 
+    /**
+     * Method used to get books handed over to reading room
+     * @param limit - limit of instances per page
+     * @param page - number of current page
+     * @param sortField - field of sorting
+     * @param sortDirection - direction of sorting
+     * @param connection - connection instance
+     * @return - page object of reading room entries per page
+     */
     public Page<ReadingRoom> getBooksHandedOverToReadingRoom(Integer limit, Integer page,
                                                              String sortField, String sortDirection,
                                                              Connection connection) {
@@ -93,6 +123,11 @@ public class OrderService {
                 .build();
     }
 
+    /**
+     * Method used to add a request as an entry to the reading room
+     * @param requestId - id of request
+     * @param connection - connection instance
+     */
     public void addRequestToReadingRoom(Long requestId, Connection connection) {
         RequestDAO requestDAO = daoFactory.createRequestDAO(connection);
         ReadingRoomDAO readingRoomDAO = daoFactory.createReadingRoomDAO(connection);
@@ -118,6 +153,13 @@ public class OrderService {
         }
     }
 
+    /**
+     * Method used to remove an entry from reading room
+     * @param userId - id of user
+     * @param bookId - id of book
+     * @param connection - connection instance
+     * @return - boolean if action is successful or not
+     */
     public boolean removeTakenBookFromReadingRoom(Long userId, Long bookId, Connection connection) {
         ReadingRoomDAO readingRoomDAO = daoFactory.createReadingRoomDAO(connection);
         StatusDAO statusDAO = daoFactory.createStatusDAO(connection);
@@ -146,6 +188,11 @@ public class OrderService {
 
     }
 
+    /**
+     * Method used to remove all books entries from reading room
+     * @param connection - connection instance
+     * @return - boolean if action is successful or not
+     */
     public boolean removeAllBooksFromReadingRoom(Connection connection) {
         ReadingRoomDAO readingRoomDAO = daoFactory.createReadingRoomDAO(connection);
         StatusDAO statusDAO = daoFactory.createStatusDAO(connection);
@@ -174,11 +221,22 @@ public class OrderService {
         }
     }
 
+    /**
+     * Method used to find a request by id
+     * @param requestId - id of seeked request
+     * @param connection - connection instance
+     * @return - seeked request instance
+     */
     public Request findRequestById(Long requestId, Connection connection) {
         RequestDAO requestDAO = daoFactory.createRequestDAO(connection);
         return requestDAO.findById(requestId);
     }
 
+    /**
+     * Method used to reject a request and update its status to 'rejected'
+     * @param requestId - id of request
+     * @param connection - connection instance
+     */
     public void rejectRequest(Long requestId, Connection connection) {
         try {
             connection.setAutoCommit(false);
@@ -203,12 +261,20 @@ public class OrderService {
         }
     }
 
-
+    /**
+     * Method used to configure a new entry which is about to be added to abonnement of user
+     * @param bookId - id of book
+     * @param userId - id of user
+     * @param date - date of return
+     * @param penalty - penalty if date of return has passed and the book wasn't returned
+     * @param requestId - id of request
+     * @param connection - connection instance
+     */
     public void configureNewOrderForAbonnement(Long bookId, Long userId, LocalDate date, Double penalty,
                                                Long requestId, Connection connection) {
         UserDAO userDAO = daoFactory.createUserDAO(connection);
         BookDAO bookDAO = daoFactory.createBookDAO(connection);
-        System.out.println("CONFIGURE");
+        logger.info("Configuring new order entry to be added in abonnement");
         try {
             connection.setAutoCommit(false);
             User user = userDAO.findById(userId);
@@ -235,7 +301,12 @@ public class OrderService {
         }
     }
 
-
+    /**
+     * Method used to add a request entry to abonnement
+     * @param abonnement - abonnement instance with info about entry
+     * @param requestId - id of request
+     * @param connection - connection instance
+     */
     private void saveRequestToUsersAbonnement(Abonnement abonnement, Long requestId, Connection connection) {
         RequestDAO requestDAO = daoFactory.createRequestDAO(connection);
         Request request = findRequestById(requestId, connection);
@@ -249,6 +320,17 @@ public class OrderService {
         abonnementDAO.create(abonnement);
     }
 
+    /**
+     * Method used to retrieve an abonnement of current user
+     * @param userId - id of current user
+     * @param status - status of seeked books
+     * @param limit - limit of instances per page
+     * @param page - current page number
+     * @param sortField - field of sorting
+     * @param sortDirection - direction of sorting
+     * @param connection - connection instance
+     * @return - page objects which contains list of abonnement entries
+     */
     public Page<Abonnement> findCurrentUserAbonnement(Long userId, String status, Integer limit, Integer page,
                                                       String sortField, String sortDirection, Connection connection) {
         AbonnementDAO abonnementDAO = daoFactory.createAbonnementDAO(connection);
@@ -272,6 +354,13 @@ public class OrderService {
                 .build();
     }
 
+    /**
+     * Method used to change order status
+     * @param action - action to apply
+     * @param userId - id of user
+     * @param bookId - id of book
+     * @param connection - connection instance
+     */
     public void changeOrderStatus(String action, Long userId, Long bookId, Connection connection) {
         System.out.println(action);
         System.out.println(userId);

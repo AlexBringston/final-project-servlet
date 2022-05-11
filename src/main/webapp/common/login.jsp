@@ -24,14 +24,13 @@
       <div class="go-to log">
         <p><fmt:message key="title.enter"/></p>
         <div class="authorize-form">
-          <form id="loginForm" method="post" action="${pageContext.request.contextPath}/app/login">
-            <input type="text" name="username" placeholder="<fmt:message key="placeholder.enter.login"/>">
-            <input type="password" name="password" placeholder="<fmt:message key="placeholder.enter.password"/>">
-
+            <form id="loginForm" method="post" action="${pageContext.request.contextPath}/app/login">
+            <input type="text" name="username" placeholder="<fmt:message key="placeholder.enter.login"/>" required>
+            <input type="password" name="password" placeholder="<fmt:message key="placeholder.enter.password"/>" required>
           </form>
           <input type="submit" form="loginForm" value="<fmt:message key="title.enter"/>">
           <p><fmt:message key="title.no.account"/> <a
-                  href="${pageContext.request.contextPath}/app/registration"><fmt:message key="button.register"/></a></p>
+                  href="${pageContext.request.contextPath}/app/registration"><fmt:message key="button.login"/></a></p>
         </div>
       </div>
       <c:if test="${requestScope.errorMessage != null}">

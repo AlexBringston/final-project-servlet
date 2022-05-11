@@ -20,11 +20,23 @@ public class User {
     public User() {
     }
 
-    public User(String name, String surname, String username, String password, LocalDate birthDate) {
+    public User(String name, String surname, String username, String password,
+                LocalDate birthDate) {
         this.name = name;
         this.surname = surname;
         this.username = username;
         this.password = password;
+        this.birthDate = birthDate;
+    }
+
+    public User(Long id, String name, String surname, String username, String password, boolean isAccountNonLocked,
+                LocalDate birthDate) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.username = username;
+        this.password = password;
+        this.isAccountNonLocked = isAccountNonLocked;
         this.birthDate = birthDate;
     }
 

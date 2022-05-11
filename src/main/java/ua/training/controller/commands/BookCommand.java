@@ -9,6 +9,9 @@ import ua.training.model.utils.Constants;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 
+/**
+ * Command used to display all available books for admin
+ */
 public class BookCommand implements Command {
 
     private final BookService bookService;

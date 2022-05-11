@@ -50,7 +50,7 @@ public class JDBCAbonnementDAO implements AbonnementDAO {
     public Abonnement findById(Long id) {
         Abonnement abonnement = new Abonnement();
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("SELECT ab.id AS abonnement_id, ab.user_id, ab.book_id, ab.penalty, ab" +
+                     connection.prepareStatement("SELECT ab.id AS abonnement_id, ab.user_id, ab.book_id, ab.penalty, ab" +
                              ".return_date, s.id as status_id, " +
                              "s.name as status_name, u.id AS user_id, u.name AS user_name, u.surname, u.username, u.password, " +
                              "u.birth_date, r.id as role_id, r.name as role_name, u.is_account_non_blocked, " +
@@ -138,7 +138,7 @@ public class JDBCAbonnementDAO implements AbonnementDAO {
                                                                            String sortField, String sortDirection) {
         List<Abonnement> abonnements = new ArrayList<>();
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("SELECT ab.id AS abonnement_id, ab.user_id, ab.book_id, ab.penalty, ab" +
+                     connection.prepareStatement("SELECT ab.id AS abonnement_id, ab.user_id, ab.book_id, ab.penalty, ab" +
                              ".return_date, s.id AS status_id, " +
                              "s.name AS status_name, u.id AS user_id, u.name AS user_name, u.surname, u.username, u" +
                              ".password, " +
@@ -191,7 +191,7 @@ public class JDBCAbonnementDAO implements AbonnementDAO {
     public Optional<Abonnement> findAbonnementByUserIdAndBookId(Long userId, Long bookId) {
         Optional<Abonnement> optionalAbonnement = Optional.empty();
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("SELECT ab.id AS abonnement_id, ab.user_id, ab.book_id, ab.penalty, ab" +
+                     connection.prepareStatement("SELECT ab.id AS abonnement_id, ab.user_id, ab.book_id, ab.penalty, ab" +
                              ".return_date, s.id as status_id, " +
                              "s.name as status_name, u.id AS user_id, u.name AS user_name, u.surname, u.username, u.password, " +
                              "u.birth_date, r.id as role_id, r.name as role_name, u.is_account_non_blocked, " +

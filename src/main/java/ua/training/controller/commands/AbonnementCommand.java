@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+/**
+ * Command to get books from abonnement either to librarian or to reader
+ */
 public class AbonnementCommand implements Command {
 
    private final OrderService orderService;

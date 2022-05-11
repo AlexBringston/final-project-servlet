@@ -11,6 +11,9 @@ import java.time.LocalDate;
 
 import static ua.training.model.utils.RegEx.*;
 
+/**
+ * Command used to create a librarian
+ */
 public class AddLibrarianCommand implements Command{
 
     private final UserService userService;

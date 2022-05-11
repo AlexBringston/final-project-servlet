@@ -28,9 +28,11 @@
                       class="new-book">
                     <input type="hidden" name="action" value="update" />
                     <input type="hidden" name="bookId" value="${requestScope.book.id}" />
+
                     <label for="name">Book name</label>
-                    <input type="text" id="name" placeholder="Назва книги" name="name" 
-                           value="${requestScope.book.name}">
+                    <input type="text" id="name" placeholder="12 best Italian recipes" name="name"
+                           value="${requestScope.book.name}" pattern="^(?!\s*$).+" required>
+
                     <div class="checkboxDiv">
                         <label for="checkbox">Is only for reading hall</label>
                         <input type="checkbox" id="checkbox" name="onlyForReadingHall"
@@ -38,25 +40,31 @@
                     </div>
 
                     <label for="publisher">Publisher</label>
-                    <input type="text" id="publisher" placeholder="Publisher" name="publisher.name"
-                           value="${requestScope.book.publisher.name}">
+                    <input type="text" id="publisher" placeholder="Orion" name="publisher.name"
+                           value="${requestScope.book.publisher.name}" pattern="^(?!\s*$).+" required>
 
                     <label for="publishedAt">Published at</label>
                     <input type="date" placeholder="Рік видання" id="publishedAt" name="publishedAt"
-                           value="${requestScope.book.publishedAt}">
+                           value="${requestScope.book.publishedAt}"
+                           required>
+
                     <label for="quantity">Quantity</label>
-                    <input type="number" min="1" id="quantity" placeholder="Кількість екземплярів" name="quantity"
-                           value="${requestScope.book.quantity}">
+                    <input type="number" min="1" id="quantity" placeholder="430" name="quantity"
+                           value="${requestScope.book.quantity}" required>
+
                     <label for="imgURL">Image URL</label>
-                    <input type="text" id="imgURL" placeholder="Image URL" name="imgUrl"
-                           value="${requestScope.book.imgUrl}">
+                    <input type="text" id="imgURL" placeholder="http://dummyimage.com/117x100.png/dddddd/000000" name="imgUrl"
+                           value="${requestScope.book.imgUrl}" required>
+
                     <label for="mainAuthorName">Main author name</label>
-                    <input type="text" id="mainAuthorName" placeholder="Main author name" name="mainAuthor.name"
-                           value="${requestScope.book.mainAuthor.name}">
+                    <input type="text" id="mainAuthorName" placeholder="Antonio" name="mainAuthor.name"
+                           value="${requestScope.book.mainAuthor.name}" pattern="^(?!\s*$).+" required>
+
                     <label for="mainAuthorSurname">Main author surname</label>
-                    <input type="text" id="mainAuthorSurname" placeholder="Main author surname"
+                    <input type="text" id="mainAuthorSurname" placeholder="Giovanni"
                            name="mainAuthor.surname"
-                           value="${requestScope.book.mainAuthor.surname}">
+                           value="${requestScope.book.mainAuthor.surname}" pattern="^(?!\s*$).+" required>
+
                     <button type="submit" name="action" value="save">Save</button>
                 </form>
             </div>

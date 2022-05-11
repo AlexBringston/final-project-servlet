@@ -37,7 +37,7 @@ public class JDBCRequestDAO implements RequestDAO {
     @Override
     public Request findById(Long id) {
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("SELECT req.id, req.user_id, req.book_id, s.id AS status_id, " +
+                     connection.prepareStatement("SELECT req.id, req.user_id, req.book_id, s.id AS status_id, " +
                              "s.name AS status_name, u.id AS user_id, u.name AS user_name, u.surname, u.username, u.password, " +
                              "u.birth_date, r.id as role_id, r.name as role_name, u.is_account_non_blocked, b.id as book_id, " +
                              "b.name as book_name, b.only_for_reading_hall, b.is_available, p.id AS publisher_id, p.name AS publisher_name, " +
@@ -113,7 +113,7 @@ public class JDBCRequestDAO implements RequestDAO {
     public List<Request> findAllByStatusName(String status, Integer limit, Integer offset, String sortField, String sortDirection) {
         List<Request> requests = new ArrayList<>();
         try (PreparedStatement preparedStatement =
-                     connection.prepareCall("SELECT req.id, req.user_id, req.book_id, s.id AS status_id, " +
+                     connection.prepareStatement("SELECT req.id, req.user_id, req.book_id, s.id AS status_id, " +
                              "s.name AS status_name, u.id AS user_id, u.name AS user_name, u.surname, u.username, u.password, " +
                              "u.birth_date, r.id as role_id, r.name as role_name, u.is_account_non_blocked, b.id as book_id, " +
                              "b.name as book_name, b.only_for_reading_hall, b.is_available, p.id AS publisher_id, p.name AS publisher_name, " +
